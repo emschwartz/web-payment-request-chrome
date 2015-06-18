@@ -1,5 +1,22 @@
 # Web Payment Request Spec proposal
 
+## Goal
+
+This is a spec for a very simple request for payment that seeks to provide users with a seemless payment experience across different websites. It allows merchants to support as many payment instruments as they want, without adding to the complexity of the experience. If implemented by browsers and merchants this standard would support all types of payment instruments, withthout any changes to the schemes.
+
+This spec aims to address:
+
+* Discovery of merchant-supported payment methods
+* Simplified user payment flow, including automatic payment instrument selection
+* Pull payments (e.g. credit cards) and push payments (e.g. Bitcoin)
+* Tokenized payment schemes
+
+## `window.requestPayment`
+
+`window.requestPayment` is called with an array of payment options as JSON objects and a callback function. The browser will either have payment instrument credentials stored or it will call out to a wallet app or extension. The wallet will select from among the merchant's list of options one that it supports and has credentials for.
+
+In the case of a pull or payee-initiated payment the wallet will return the payment credentials, which can be tokenized, to the callback. In the case of a push or payer-initiated payment the wallet can directly submit the payment authorization to the payment instrument and return the proof of payment to the merchant.
+
 ```js
 window.requestPayment([{
   // List of payment options specified using JSON-LD
@@ -26,6 +43,9 @@ window.requestPayment([{
   // and the response is the proof of payment
 })
 ```
+
+Further development of this spec would likely include discussion about whether browsers will implement the wallet functionality or provide an API for wallets to handle the `requestPayment` call. Either way, we should discuss how new schemes and instruments will be added to the wallet software.
+
 
 ## Running the extension
 
