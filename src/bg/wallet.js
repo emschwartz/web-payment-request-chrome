@@ -53,16 +53,63 @@ function sendBitcoinPayment(options, sendResponse) {
 chrome.runtime.onMessageExternal.addListener(
   function(message, sender, sendResponse) {
 
+    chrome.pageAction.show(sender.tab.id);
+
     console.log('got request for payment with options: ', message.paymentOptions)
 
     // Pick one of the options we support
     for (var option of message.paymentOptions) {
       if (option.appliesToPaymentMethod &&
-        supportedMethods[option.appliesToPaymentMethod]) {
+        supportedMethods[option.appliesToPaymentMethod.toLowerCase()]) {
 
-        console.log('using payment method: ' + option.appliesToPaymentMethod)
-        supportedMethods[option.appliesToPaymentMethod](option, sendResponse);
-        return;
+        var instrument = option.appliesToPaymentMethod.toLowerCase();
+
+        console.log('Waiting for confirmation on payment: ' + instrument)
+
+        var notificationId = 'paymentConfirmation';
+
+        chrome.notifications.create('paymentConfirmation',
+          {
+            title: 'Payment Confirmation',
+            message: 'This page is requesting a ' +
+              instrument +
+              ' payment for ' +
+              option.price + ' ' +
+              option.priceCurrency +
+              '. Would you like to continue?',
+            iconUrl: 'icons/wallet48.png',
+            type: 'basic',
+            buttons: [{
+              title: 'Confirm Payment',
+              iconUrl: 'icons/coin38.png'
+            }, {
+              title: 'Reject Payment'
+            }]
+          });
+
+        // I need to call this function from within the onButtonClicked listener but the function sendResponse isn't being included properly
+        // Any ideas what to do? It's a scope issue
+        // It's not getting called
+        function buttonListener(notifId, btnIndex) {
+          if (btnIndex === 0) {
+            console.log('Payment confirmed')
+            supportedMethods[instrument](option, sendResponse);
+          } else {
+            console.log('Payment rejected');
+          }
+          chrome.notifications.clear(notificationId);
+        }
+        chrome.notifications.onButtonClicked.addListener(buttonListener);
+
+        chrome.notifications.onClosed.addListener(function(notifId) {
+          if (notifId !== notificationId) {
+            return;
+          }
+          console.log('Payment rejected');
+        });
+
+        // Keep message channel open
+        return true;
       }
     }
 
