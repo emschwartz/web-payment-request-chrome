@@ -2,9 +2,11 @@
 
 ## Goal
 
-This is a spec for a very simple request for payment that seeks to provide users with a seemless payment experience across different websites. It allows merchants to support as many payment instruments as they want, without adding to the complexity of the experience. If implemented by browsers and merchants this standard would support all types of payment instruments, withthout any changes to the schemes.
+This is a spec for a very simple request for payment that seeks to provide users with a seemless payment experience across different websites. It allows merchants to support as many payment instruments as they want, without adding to the complexity of the experience.
 
-This spec aims to address:
+If implemented by browsers and merchants this standard would support all types of payment instruments, withthout any changes to the schemes.
+
+### This spec aims to address:
 
 * Supporting all payment schemes
 * Easy discovery of merchant-supported payment methods
@@ -13,7 +15,7 @@ This spec aims to address:
 * Pull payments (e.g. credit cards) and push payments (e.g. Bitcoin)
 * Tokenized payment schemes
 
-This spec does *not* aim to address:
+### This spec does *not* aim to address:
 
 * The security, speed, or cost of payment schemes
 * Methods of authentication
@@ -22,7 +24,7 @@ This spec does *not* aim to address:
 
 This spec also does not address digital identity, but it is likely that a _separate_ standard for Web Credentials would improve the Web Payment experience and security.
 
-## `window.requestPayment`
+## `window.requestPayment()`
 
 `window.requestPayment` is called with an array of payment options as JSON objects and a callback function. The browser will either have payment instrument credentials stored or it will call out to a wallet app or extension. The wallet will select from among the merchant's list of options one that it supports and has credentials for.
 
