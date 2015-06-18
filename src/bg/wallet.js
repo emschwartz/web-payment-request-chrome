@@ -6,6 +6,8 @@ var supportedMethods = {
   bitcoin: sendBitcoinPayment
 };
 
+console.log('Wallet supports: ' + Object.keys(supportedMethods).join(', '))
+
 function loadCardDetails(options, sendResponse) {
   // TODO Get card details from storage
   var cardDetails = {
@@ -15,8 +17,14 @@ function loadCardDetails(options, sendResponse) {
     "cvv2": 111,
     "first_name": "Betsy",
     "last_name": "Buyer"
-  }
-  sendResponse(cardDetails);
+  };
+
+  // TODO do something better than adding the properties
+  // to the initital object we were sent
+  Object.keys(cardDetails).forEach(function(key) {
+    options[key] = cardDetails[key];
+  })
+  sendResponse(options);
 }
 
 function sendBitcoinPayment(options, sendResponse) {
@@ -36,7 +44,10 @@ function sendBitcoinPayment(options, sendResponse) {
 
   // TODO Submit transaction
   
-  sendResponse(txBuilt.toHex());
+  // TODO do something better than adding the properties
+  // to the initital object we were sent
+  options.tx = txBuilt.toHex();
+  sendResponse(options);
 }
 
 chrome.runtime.onMessageExternal.addListener(
