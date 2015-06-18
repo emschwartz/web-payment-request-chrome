@@ -70,5 +70,4 @@ Further development of this spec would likely include discussion about whether b
 1. Clone the repo
 2. Follow [these instructions](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension in chrome
 3. Modify the `inject/inject.js` script and change the `extensionId` to the one generated when the extension is loaded into Chrome
-4. Install and run the [Web Payment Request Demo Server](https://github.com/emschwartz/web-payment-request-demo-server)
-5. Open the developer console for the extension's background page to see logged output
+4. Visit https://web-payment-request-demo.herokuapp.com/ or install and run the [Web Payment Request Demo Server](https://github.com/emschwartz/web-payment-request-demo-server)
