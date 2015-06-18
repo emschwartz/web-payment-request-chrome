@@ -6,10 +6,21 @@ This is a spec for a very simple request for payment that seeks to provide users
 
 This spec aims to address:
 
-* Discovery of merchant-supported payment methods
+* Supporting all payment schemes
+* Easy discovery of merchant-supported payment methods
 * Simplified user payment flow, including automatic payment instrument selection
+* Reduction of "cart abandonment"
 * Pull payments (e.g. credit cards) and push payments (e.g. Bitcoin)
 * Tokenized payment schemes
+
+This spec does *not* aim to address:
+
+* The security, speed, or cost of payment schemes
+* Methods of authentication
+* Standardized proofs of payments or receipts
+* Syncing payment credentials across devices (this is up to the browser/wallet)
+
+This spec also does not address digital identity, but it is likely that a _separate_ standard for Web Credentials would improve the Web Payment experience and security.
 
 ## `window.requestPayment`
 
@@ -31,18 +42,23 @@ window.requestPayment([{
   "appliesToPaymentMethod": "bitcoin",
   "price": .5,
   "priceCurrency": "BTC",
-  "address": "...bitcoin pay-to address...",
+  "address": "16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM",
   "outputs": [
     ["1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK", 15000]
   ]
 }], function(response) {
   console.log(response)
-  // In the case of pull, submit the response details
-  // to the processor
-  // In the case of a push, we should already have been paid
-  // and the response is the proof of payment
+  // In the case of pull, submit the response details to the processor
+  // In the case of a push, we should already have been paid and the 
+  //   response may be the proof of payment or transaction ID
 })
 ```
+
+The format of the payment option objects does not necessarily need to be formally standardized. [JSON-LD](http://json-ld.org/) can be used to provide context for the data formats used. Wallets can support any formats they want, and can provide extension functionality to enable users to add new schemes (and the behavior necessary to pay with that scheme) to them. 
+
+The response format is dependent on the scheme used and also does not need to be standardized. The merchant will know what to do with the response (and in what ways they can trust it) because they are the ones that asked for payment through that scheme in the first place.
+
+> Note: The responses do not require a signature specification. Whether or not the response must be signed is highly dependent on the scheme and potentially the details of the payment. For cryptographic push-based systems the response will, in almost all cases, be digitally signed. However, requiring a digital signature from all schemes would place a high implementation burden on payment schemes and would severely hamper the adoption of this standard.
 
 Further development of this spec would likely include discussion about whether browsers will implement the wallet functionality or provide an API for wallets to handle the `requestPayment` call. Either way, we should discuss how new schemes and instruments will be added to the wallet software.
 
