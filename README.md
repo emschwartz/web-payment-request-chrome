@@ -31,5 +31,6 @@ window.requestPayment([{
 
 1. Clone the repo
 2. Follow [these instructions](https://developer.chrome.com/extensions/getstarted#unpacked) to load the extension in chrome
-3. Serve the `index.html` using any basic webserver
-4. Open the developer console to see logged output
+3. Modify the `inject/inject.js` script and change the `extensionId` to the one generated when the extension is loaded into Chrome
+4. Install and run the [Web Payment Request Demo Server](https://github.com/emschwartz/web-payment-request-demo-server)
+5. Open the developer console for the extension's background page to see logged output
