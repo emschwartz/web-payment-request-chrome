@@ -10,7 +10,6 @@
     "128": "icons/icon128.png"
   },
   "default_locale": "en",
-  "options_page": "src/options_custom/index.html",
   "page_action": {
     "default_icon": {
       "19": "icons/coin19.png",
@@ -33,7 +32,8 @@
   ],
   "content_scripts": [{
     "matches": [
-      "*://localhost/*"
+      "*://localhost/*",
+      "https://web-payment-request-demo.herokuapp.com/"
     ],
     "js": [
       "src/inject/inject.js"
@@ -42,7 +42,8 @@
   }],
   "externally_connectable": {
     "matches": [
-      "*://localhost/*"
+      "*://localhost/*",
+      "https://web-payment-request-demo.herokuapp.com/"
     ]
   }
 }
